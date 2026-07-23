@@ -3,378 +3,1401 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Piña Snack - Emprendimiento agroempresarial de Hato Corozal, Casanare. Snacks de piña osmo-deshidratada 100% natural.">
+    <meta name="author" content="Pedro Tineo, Josué Montoya, Emmanuel Gomez, Daniela Gómez Bastilla">
     <title>Piña Snack | Agroindustria de Hato Corozal</title>
     
-    <!-- Fuentes de Google: Poppins para un look moderno y amigable -->
+    <!-- Google Fonts: Poppins & Montserrat para un contraste profesional -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
+    <!-- SweetAlert2 para alertas bonitas (Bugs prevention) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
+        /* ==========================================================================
+           VARIABLES GLOBALES DE COLOR Y DISEÑO
+           ========================================================================== */
         :root {
+            --verde-primario: #2e7d32;
             --verde-oscuro: #1b5e20;
             --verde-claro: #4caf50;
             --amarillo-pina: #fbc02d;
+            --naranja-acento: #ff9800;
             --fondo-crema: #fdfbf7;
-            --texto-oscuro: #2d3436;
+            --texto-principal: #2d3436;
+            --texto-secundario: #636e72;
+            --blanco: #ffffff;
             --nequi: #4a148c;
+            --sombra-suave: 0 10px 30px rgba(0,0,0,0.05);
+            --sombra-fuerte: 0 15px 40px rgba(0,0,0,0.12);
+            --borde-radio: 15px;
+            --transicion: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* ==========================================================================
+           ESTILOS BASE
+           ========================================================================== */
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--fondo-crema);
-            color: var(--texto-oscuro);
-            scroll-behavior: smooth;
+            color: var(--texto-principal);
+            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* --- Menú Glassmorphism (Efecto Vidrio) --- */
-        .navbar {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
         }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ==========================================================================
+           ANIMACIONES CLAVE (KEYFRAMES)
+           ========================================================================== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-in-out;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==========================================================================
+           LOADER (Pantalla de Carga)
+           ========================================================================== */
+        #loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--verde-oscuro);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--amarillo-pina);
+            transition: opacity 0.5s ease;
+        }
+        
+        .spinner-pina {
+            font-size: 4rem;
+            animation: pulse 1s infinite;
+        }
+
+        /* ==========================================================================
+           NAVBAR (Menú Superior)
+           ========================================================================== */
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            box-shadow: var(--sombra-suave);
+            padding: 15px 0;
+            transition: var(--transicion);
+        }
+
+        .navbar-custom.scrolled {
+            padding: 8px 0;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
         .navbar-brand {
             color: var(--verde-oscuro) !important;
-            font-weight: 800;
-            font-size: 1.5rem;
+            font-weight: 900;
+            font-size: 1.6rem;
+            letter-spacing: -0.5px;
         }
+
+        .navbar-brand i {
+            color: var(--amarillo-pina);
+        }
+
         .nav-link {
-            color: var(--texto-oscuro) !important;
+            color: var(--texto-principal) !important;
             font-weight: 600;
-            margin: 0 10px;
+            margin: 0 12px;
             position: relative;
+            padding: 5px 0 !important;
         }
+
         .nav-link::after {
             content: '';
             position: absolute;
-            width: 0; height: 3px;
-            bottom: 0; left: 0;
-            background-color: var(--amarillo-pina);
-            transition: width 0.3s;
-        }
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        /* --- Hero Section (Portada Inmersiva) --- */
-        .hero {
-            position: relative;
-            min-height: 90vh;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(to right, rgba(27, 94, 32, 0.9), rgba(76, 175, 80, 0.7)), url('https://images.unsplash.com/photo-1550258987-190a2d41a8ba?auto=format&fit=crop&w=1920&q=80') center/cover;
-            color: white;
-            padding-top: 80px; /* Espacio para el menú */
-        }
-        .hero h1 {
-            font-size: 4rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 20px;
-        }
-        .hero h1 span {
-            color: var(--amarillo-pina);
-        }
-        .hero p {
-            font-size: 1.2rem;
-            font-weight: 300;
-            opacity: 0.9;
-        }
-
-        /* --- Secciones y Espaciados --- */
-        .seccion { padding: 100px 0; }
-        .titulo-seccion {
-            font-weight: 800;
-            color: var(--verde-oscuro);
-            margin-bottom: 50px;
-            position: relative;
-            display: inline-block;
-        }
-        .titulo-seccion::after {
-            content: '';
-            position: absolute;
-            width: 50%; height: 4px;
-            bottom: -10px; left: 25%;
-            background-color: var(--amarillo-pina);
+            width: 0;
+            height: 3px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--verde-primario);
+            transition: var(--transicion);
             border-radius: 2px;
         }
 
-        /* --- Tarjetas de Información --- */
-        .info-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px 30px;
-            height: 100%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            border-bottom: 5px solid var(--verde-claro);
-            transition: transform 0.3s;
-        }
-        .info-card:hover { transform: translateY(-10px); }
-        .info-icon {
-            font-size: 3rem;
-            color: var(--amarillo-pina);
-            margin-bottom: 20px;
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
         }
 
-        /* --- Tarjetas de Producto --- */
-        .producto-card {
-            background: white;
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
+        /* Carrito Ícono en Menú */
+        .cart-icon-container {
             position: relative;
+            cursor: pointer;
+            margin-left: 20px;
         }
-        .producto-card:hover {
-            transform: scale(1.03);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
-        }
-        .etiqueta-top {
-            position: absolute; top: 20px; right: 20px;
-            background: var(--verde-oscuro); color: white;
-            padding: 5px 15px; border-radius: 20px;
-            font-weight: 600; z-index: 2;
-        }
-        .producto-img {
-            height: 280px; width: 100%; object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        .producto-card:hover .producto-img {
-            transform: scale(1.1);
-        }
-        .precio {
-            font-size: 2.5rem; font-weight: 800;
+        
+        .cart-icon-container i {
+            font-size: 1.5rem;
             color: var(--verde-oscuro);
         }
         
-        /* Botones */
-        .btn-principal {
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: var(--naranja-acento);
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* ==========================================================================
+           HERO SECTION (Portada)
+           ========================================================================== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(27, 94, 32, 0.92) 0%, rgba(76, 175, 80, 0.85) 100%), 
+                        url('https://images.unsplash.com/photo-1550258987-190a2d41a8ba?auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+            color: var(--blanco);
+            padding-top: 100px;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 100px;
+            background: linear-gradient(to top, var(--fondo-crema), transparent);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero h1 span {
+            color: var(--amarillo-pina);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            font-weight: 300;
+            opacity: 0.95;
+            max-width: 600px;
+            margin-bottom: 40px;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .btn-hero {
             background-color: var(--amarillo-pina);
-            color: var(--texto-oscuro);
-            font-weight: 800;
-            padding: 15px 30px;
+            color: var(--verde-oscuro);
+            font-weight: 700;
+            padding: 16px 40px;
             border-radius: 50px;
             border: none;
-            transition: 0.3s;
+            font-size: 1.1rem;
+            transition: var(--transicion);
+            box-shadow: 0 10px 20px rgba(251, 192, 45, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: fadeIn 1.4s ease-out;
         }
-        .btn-principal:hover {
-            background-color: #f5b000;
-            transform: scale(1.05);
-        }
-        .btn-nequi {
-            background-color: var(--nequi); color: white;
-            font-weight: 600; padding: 15px; border-radius: 15px;
-            width: 100%; border: none; transition: 0.3s;
-        }
-        .btn-nequi:hover { background-color: #380b6b; color: white; }
 
-        /* --- Botón Flotante WhatsApp --- */
-        .whatsapp-float {
+        .btn-hero:hover {
+            background-color: #ffeb3b;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(251, 192, 45, 0.4);
+            color: var(--verde-oscuro);
+        }
+
+        /* ==========================================================================
+           SECCIONES COMUNES
+           ========================================================================== */
+        .seccion {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .seccion-oscura {
+            background-color: var(--blanco);
+        }
+
+        .titulo-seccion {
+            font-size: 2.5rem;
+            color: var(--verde-oscuro);
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .titulo-seccion::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 5px;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--amarillo-pina);
+            border-radius: 5px;
+        }
+        
+        .subtitulo-seccion {
+            text-align: center;
+            color: var(--texto-secundario);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: -40px auto 60px auto;
+        }
+
+        /* ==========================================================================
+           HISTORIA Y CONTEXTO (El Proyecto)
+           ========================================================================== */
+        .texto-destacado {
+            font-size: 1.15rem;
+            color: var(--texto-principal);
+            border-left: 5px solid var(--verde-primario);
+            padding-left: 20px;
+            background: #f1f8e9;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 25px;
+        }
+
+        .img-proyecto {
+            border-radius: 20px;
+            box-shadow: var(--sombra-fuerte);
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: var(--transicion);
+        }
+        
+        .img-proyecto:hover {
+            transform: scale(1.02);
+        }
+
+        .lista-objetivos li {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            position: relative;
+            padding-left: 35px;
+        }
+
+        .lista-objetivos li::before {
+            content: '\F26A'; /* Icono check Bootstrap */
+            font-family: 'bootstrap-icons';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--verde-primario);
+            font-size: 1.3rem;
+        }
+
+        /* ==========================================================================
+           TARJETAS DE BENEFICIOS (Características)
+           ========================================================================== */
+        .card-beneficio {
+            background: var(--blanco);
+            border-radius: var(--borde-radio);
+            padding: 40px 30px;
+            height: 100%;
+            text-align: center;
+            box-shadow: var(--sombra-suave);
+            border-bottom: 6px solid var(--verde-claro);
+            transition: var(--transicion);
+            z-index: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-beneficio::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 0;
+            background-color: var(--verde-claro);
+            transition: var(--transicion);
+            z-index: -1;
+            opacity: 0.05;
+        }
+
+        .card-beneficio:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--sombra-fuerte);
+        }
+
+        .card-beneficio:hover::before {
+            height: 100%;
+        }
+
+        .icon-beneficio {
+            font-size: 3.5rem;
+            color: var(--verde-primario);
+            margin-bottom: 25px;
+            display: inline-block;
+            transition: var(--transicion);
+        }
+        
+        .card-beneficio:hover .icon-beneficio {
+            color: var(--amarillo-pina);
+            transform: scale(1.1);
+        }
+
+        /* ==========================================================================
+           LIENZO CANVAS (Business Model)
+           ========================================================================== */
+        .canvas-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: auto auto;
+            gap: 15px;
+            background: var(--blanco);
+            padding: 20px;
+            border-radius: var(--borde-radio);
+            box-shadow: var(--sombra-suave);
+        }
+
+        .canvas-box {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            transition: var(--transicion);
+        }
+
+        .canvas-box:hover {
+            border-color: var(--verde-primario);
+            background: #f1f8e9;
+        }
+
+        .canvas-box h4 {
+            font-size: 1.1rem;
+            color: var(--verde-oscuro);
+            border-bottom: 2px solid var(--amarillo-pina);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .canvas-box p, .canvas-box ul {
+            font-size: 0.9rem;
+            color: var(--texto-secundario);
+            margin-bottom: 0;
+            padding-left: 15px;
+        }
+
+        /* Layout Grid del Canvas */
+        .c-problema { grid-column: 1 / 2; grid-row: 1 / 2; }
+        .c-solucion { grid-column: 2 / 3; grid-row: 1 / 2; }
+        .c-propuesta { grid-column: 3 / 4; grid-row: 1 / 2; }
+        .c-ventaja { grid-column: 4 / 5; grid-row: 1 / 2; }
+        .c-clientes { grid-column: 5 / 6; grid-row: 1 / 2; }
+        .c-costos { grid-column: 1 / 4; grid-row: 2 / 3; }
+        .c-ingresos { grid-column: 4 / 6; grid-row: 2 / 3; }
+
+        @media (max-width: 991px) {
+            .canvas-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+            .c-problema, .c-solucion, .c-propuesta, .c-ventaja, .c-clientes, .c-costos, .c-ingresos {
+                grid-column: 1 / -1;
+                grid-row: auto;
+            }
+        }
+
+        /* ==========================================================================
+           TIENDA Y PRODUCTOS
+           ========================================================================== */
+        .producto-card {
+            background: var(--blanco);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--sombra-suave);
+            transition: var(--transicion);
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.05);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .producto-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--sombra-fuerte);
+        }
+
+        .badge-producto {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--verde-primario);
+            color: var(--blanco);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .badge-producto.premium {
+            background-color: var(--naranja-acento);
+        }
+
+        .producto-img-container {
+            width: 100%;
+            height: 280px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .producto-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .producto-card:hover .producto-img {
+            transform: scale(1.1);
+        }
+
+        .producto-body {
+            padding: 30px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .producto-titulo {
+            font-size: 1.5rem;
+            color: var(--verde-oscuro);
+            margin-bottom: 5px;
+        }
+
+        .producto-peso {
+            color: var(--amarillo-pina);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .producto-desc {
+            color: var(--texto-secundario);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .producto-precio {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--texto-principal);
+            margin-bottom: 20px;
+        }
+
+        .btn-add-cart {
+            background-color: var(--verde-primario);
+            color: var(--blanco);
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: var(--transicion);
+        }
+
+        .btn-add-cart:hover {
+            background-color: var(--verde-oscuro);
+            transform: scale(1.02);
+        }
+
+        /* ==========================================================================
+           CARRITO LATERAL (Offcanvas)
+           ========================================================================== */
+        .offcanvas-cart {
+            width: 400px;
+            border-left: none;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+        }
+        
+        .cart-header {
+            background-color: var(--verde-oscuro);
+            color: white;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-title {
+            font-weight: 700;
+            color: var(--texto-principal);
+            margin: 0;
+        }
+
+        .cart-item-price {
+            color: var(--verde-primario);
+            font-weight: 600;
+        }
+
+        .cart-item-remove {
+            color: #ff5252;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1.2rem;
+        }
+
+        .cart-total-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .btn-nequi-checkout {
+            background-color: var(--nequi);
+            color: white;
+            font-weight: 700;
+            padding: 15px;
+            border-radius: 10px;
+            width: 100%;
+            border: none;
+            transition: var(--transicion);
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-nequi-checkout:hover {
+            background-color: #380b6b;
+            color: var(--amarillo-pina);
+        }
+
+        /* ==========================================================================
+           SECCIÓN ENCUESTA (Validación de Mercado)
+           ========================================================================== */
+        .encuesta-container {
+            background: var(--blanco);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: var(--sombra-fuerte);
+            border-top: 8px solid var(--verde-primario);
+        }
+
+        .pregunta-box {
+            background: #fdfbf7;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid #eaeaea;
+            transition: var(--transicion);
+        }
+
+        .pregunta-box:hover {
+            border-color: var(--amarillo-pina);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+
+        .pregunta-titulo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--verde-oscuro);
+            margin-bottom: 15px;
+        }
+
+        /* Estilización de Radio Buttons */
+        .form-check-custom {
+            margin-bottom: 10px;
+            padding-left: 30px;
+        }
+        
+        .form-check-input-custom {
+            width: 20px;
+            height: 20px;
+            margin-left: -30px;
+            cursor: pointer;
+            accent-color: var(--verde-primario);
+        }
+
+        .form-check-label-custom {
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--texto-secundario);
+            transition: color 0.2s;
+        }
+
+        .form-check-custom:hover .form-check-label-custom {
+            color: var(--verde-primario);
+            font-weight: 500;
+        }
+
+        /* ==========================================================================
+           BOTÓN FLOTANTE WHATSAPP
+           ========================================================================== */
+        .btn-whatsapp-float {
             position: fixed;
-            width: 60px; height: 60px;
-            bottom: 40px; right: 40px;
-            background-color: #25d366; color: #FFF;
-            border-radius: 50px; text-align: center;
-            font-size: 30px; box-shadow: 2px 2px 15px rgba(0,0,0,0.2);
-            z-index: 1000; transition: all 0.3s ease;
-            display: flex; justify-content: center; align-items: center;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            transition: var(--transicion);
             text-decoration: none;
-        }
-        .whatsapp-float:hover {
-            transform: scale(1.1); color: white;
+            animation: pulse 2s infinite;
         }
 
-        /* --- Footer --- */
+        .btn-whatsapp-float:hover {
+            transform: scale(1.1) translateY(-5px);
+            color: white;
+            box-shadow: 0 15px 25px rgba(37, 211, 102, 0.6);
+            animation: none;
+        }
+
+        /* ==========================================================================
+           FOOTER
+           ========================================================================== */
         footer {
-            background-color: var(--verde-oscuro); color: rgba(255,255,255,0.8);
-            padding: 60px 0 30px 0;
+            background-color: var(--verde-oscuro);
+            color: rgba(255, 255, 255, 0.85);
+            padding: 80px 0 30px 0;
+            position: relative;
+        }
+
+        .footer-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--blanco);
+            margin-bottom: 20px;
+        }
+
+        .footer-logo span {
+            color: var(--amarillo-pina);
+        }
+
+        .footer-title {
+            color: var(--blanco);
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-list li {
+            margin-bottom: 10px;
+        }
+
+        .footer-list a {
+            transition: var(--transicion);
+        }
+
+        .footer-list a:hover {
+            color: var(--amarillo-pina);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        .creditos-programacion {
+            color: var(--amarillo-pina);
+            font-weight: 600;
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 768px) {
+            .seccion { padding: 60px 0; }
+            .hero { text-align: center; }
+            .encuesta-container { padding: 25px; }
         }
     </style>
 </head>
 <body data-bs-spy="scroll" data-bs-target="#navbarPrincipal">
 
-    <!-- Navbar -->
-    <nav id="navbarPrincipal" class="navbar navbar-expand-lg fixed-top">
+    <!-- Pantalla de Carga (Loader) -->
+    <div id="loader">
+        <i class="bi bi-brightness-alt-high-fill spinner-pina mb-3"></i>
+        <h3 class="fw-bold">Preparando Snacks...</h3>
+    </div>
+
+    <!-- Navegación -->
+    <nav id="navbarPrincipal" class="navbar navbar-expand-lg navbar-custom fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#inicio">
-                <i class="bi bi-brightness-high-fill text-warning"></i> Piña Snack
+                <i class="bi bi-brightness-high-fill"></i> Piña<span>Snack</span>
             </a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-end" id="menu">
+            <div class="collapse navbar-collapse justify-content-center" id="menu">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#historia">Nuestra Historia</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#proceso">El Proceso</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#historia">El Proyecto</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#canvas">Modelo Canvas</a></li>
                     <li class="nav-item"><a class="nav-link" href="#tienda">Tienda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#encuesta">Encuesta</a></li>
                 </ul>
+            </div>
+            <div class="d-none d-lg-flex align-items-center">
+                <div class="cart-icon-container" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+                    <i class="bi bi-cart3"></i>
+                    <span class="cart-badge" id="cartBadgeCount">0</span>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Inicio (Hero) -->
     <section id="inicio" class="hero">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
-                    <span class="badge bg-warning text-dark mb-3 px-3 py-2 rounded-pill fs-6">Agroindustria 100% Casanareña</span>
-                    <h1>El sabor del llano, <span>en tu bolsillo.</span></h1>
-                    <p class="mb-5 mt-3 fs-4">Snacks de piña natural osmo-deshidratada. Una alternativa nutritiva, deliciosa y de larga vida útil que apoya directamente a los campesinos de Hato Corozal.</p>
-                    <a href="#tienda" class="btn btn-principal shadow-lg"><i class="bi bi-cart3 me-2"></i>Ver Productos</a>
-                    <a href="#historia" class="btn btn-outline-light ms-3 px-4 py-3 rounded-pill fw-bold" style="border-width: 2px;">Conoce Más</a>
+            <div class="row align-items-center">
+                <div class="col-lg-7 text-center text-lg-start">
+                    <span class="badge bg-warning text-dark mb-4 px-3 py-2 rounded-pill fs-6 fw-bold" style="animation: fadeIn 0.8s;">CIIU 1030 - Hato Corozal, Casanare</span>
+                    <h1>Delicias Naturales.<br><span>Piña Deshidratada</span> al Instante.</h1>
+                    <p>Un proyecto agroempresarial que transforma la Piña Gold en un snack portátil, duradero y 100% libre de químicos. Salvamos cosechas y apoyamos al campesino.</p>
+                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start mt-4">
+                        <a href="#tienda" class="btn btn-hero"><i class="bi bi-shop me-2"></i>Ir a la Tienda</a>
+                        <a href="#historia" class="btn btn-outline-light text-white fw-bold px-4 py-3 rounded-pill" style="border-width: 2px;">Descubrir Proceso</a>
+                    </div>
+                </div>
+                <!-- Espacio vacío en desktop para mostrar el fondo de la piña -->
+                <div class="col-lg-5 d-none d-lg-block"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección: Historia e Impacto -->
+    <section id="historia" class="seccion seccion-oscura reveal">
+        <div class="container">
+            <h2 class="titulo-seccion">Un Emprendimiento con Impacto Territorial</h2>
+            <p class="subtitulo-seccion">No solo vendemos un producto, resolvemos un problema real en nuestro municipio.</p>
+            
+            <div class="row g-5 align-items-center mt-2">
+                <div class="col-lg-6">
+                    <!-- Imagen de campo de piñas -->
+                    <img src="https://images.unsplash.com/photo-1589984662646-e7b2e4962f18?auto=format&fit=crop&w=800&q=80" alt="Cultivos de piña en Casanare" class="img-proyecto">
+                </div>
+                <div class="col-lg-6">
+                    <div class="texto-destacado">
+                        <strong>El Problema:</strong> En Hato-Corozal, Casanare, los rendimientos de la piña GOLD alcanzan hasta 35 toneladas por hectárea. Sin embargo, las difíciles vías veredales en invierno provocan que el <strong>25% de la producción se pierda</strong> por sobre maduración.
+                    </div>
+                    <h4 class="fw-bold mb-3" style="color: var(--verde-primario);">La Solución: Osmo-deshidratación</h4>
+                    <p class="text-muted">Mediante un proceso técnico, sumergimos los trozos de fruta en una solución concentrada que extrae el agua por presión osmótica. Luego se realiza un secado al aire libre.</p>
+                    <ul class="list-unstyled lista-objetivos mt-4 text-muted">
+                        <li>Reduce el peso de la fruta en un 80%.</li>
+                        <li>Extiende la vida útil por meses sin necesidad de nevera.</li>
+                        <li>Garantiza compras justas y directas a los agricultores.</li>
+                        <li>Estandariza un snack portátil ideal para estudiantes y trabajadores.</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Nuestra Historia -->
-    <section id="historia" class="seccion bg-white">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="titulo-seccion">Un Emprendimiento con Propósito</h2>
-            </div>
-            <div class="row g-5 align-items-center">
-                <div class="col-lg-6">
-                    <img src="https://images.unsplash.com/photo-1589984662646-e7b2e4962f18?auto=format&fit=crop&w=800&q=80" alt="Cultivo de Piña" class="img-fluid rounded-4 shadow">
+    <!-- Sección: Características del Producto -->
+    <section class="seccion" style="background-color: #f1f8e9;">
+        <div class="container reveal">
+            <h2 class="titulo-seccion">Nuestra Promesa de Calidad</h2>
+            <div class="row g-4 mt-3">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-beneficio">
+                        <i class="bi bi-shield-check icon-beneficio"></i>
+                        <h4 class="fw-bold">100% Natural</h4>
+                        <p class="text-muted mb-0">Sin conservantes ni químicos ultra procesados. Conservamos el sabor auténtico y dulce de la piña casanareña.</p>
+                    </div>
                 </div>
-                <div class="col-lg-6">
-                    <h3 class="fw-bold mb-4" style="color: var(--verde-oscuro);">El Problema que Resolvemos</h3>
-                    <p class="fs-5 text-muted">El departamento de Casanare es un gran productor de piña, especialmente la variedad <strong>Piña GOLD</strong>, con rendimientos de hasta 35 toneladas por hectárea[cite: 1].</p>
-                    <p class="fs-5 text-muted">Sin embargo, en Hato-Corozal, las difíciles vías de acceso durante el invierno causan que hasta un <strong>25% de la producción local se pierda</strong> por sobre maduración[cite: 1]. Nosotros intervenimos comprando esa fruta a un precio justo para transformarla y evitar el desperdicio[cite: 1].</p>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-beneficio">
+                        <i class="bi bi-box-seam icon-beneficio"></i>
+                        <h4 class="fw-bold">Empaque Óptimo</h4>
+                        <p class="text-muted mb-0">Bolsas herméticas que protegen el producto de la humedad y el calor, facilitando su transporte en cualquier lonchera.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mx-auto">
+                    <div class="card-beneficio">
+                        <i class="bi bi-people icon-beneficio"></i>
+                        <h4 class="fw-bold">Comercio Justo</h4>
+                        <p class="text-muted mb-0">Dinamizamos la economía local al comprar de forma directa a los agricultores de nuestras veredas.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- El Proceso (Info Cards) -->
-    <section id="proceso" class="seccion">
+    <!-- Sección: Lienzo Lean Canvas -->
+    <section id="canvas" class="seccion seccion-oscura reveal">
         <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="titulo-seccion">Innovación y Calidad</h2>
-                <p class="lead text-muted">¿Cómo logramos un producto duradero sin químicos?</p>
+            <h2 class="titulo-seccion">Estructuración Estratégica</h2>
+            <p class="subtitulo-seccion">Modelo de Negocio (Lean Canvas) validado en campo para asegurar la viabilidad comercial y financiera.</p>
+            
+            <div class="canvas-container">
+                <div class="canvas-box c-problema">
+                    <h4><i class="bi bi-exclamation-triangle me-2"></i>1. Problema</h4>
+                    <ul>
+                        <li>Pérdida de cosechas de piña por vías difíciles.</li>
+                        <li>Falta de meriendas saludables en colegios.</li>
+                        <li>Fruta fresca se daña rápido.</li>
+                    </ul>
+                </div>
+                <div class="canvas-box c-solucion">
+                    <h4><i class="bi bi-lightbulb me-2"></i>2. Solución</h4>
+                    <ul>
+                        <li>Snacks osmo-deshidratados duraderos.</li>
+                        <li>Empaque liviano portátil.</li>
+                        <li>Compra directa al campesino.</li>
+                    </ul>
+                </div>
+                <div class="canvas-box c-propuesta">
+                    <h4><i class="bi bi-gem me-2"></i>3. Propuesta de Valor</h4>
+                    <p>Snacks de piña llanera 100% natural, listos para comer, que duran meses sin dañar ni necesitar nevera, apoyando al campo de Hato Corozal.</p>
+                </div>
+                <div class="canvas-box c-ventaja">
+                    <h4><i class="bi bi-stars me-2"></i>4. Ventaja Especial</h4>
+                    <p>Uso de materia prima local adquirida directamente en veredas, reduciendo costos de transporte un 80%.</p>
+                </div>
+                <div class="canvas-box c-clientes">
+                    <h4><i class="bi bi-person-hearts me-2"></i>5. Clientes</h4>
+                    <ul>
+                        <li>Estudiantes y profesores.</li>
+                        <li>Padres de familia.</li>
+                        <li>Habitantes enfocados en salud.</li>
+                    </ul>
+                </div>
+                <div class="canvas-box c-costos">
+                    <h4><i class="bi bi-cash-stack me-2"></i>6. Estructura de Costos</h4>
+                    <ul>
+                        <li>Compra de piña fresca local y empaques.</li>
+                        <li>Producción (gas, luz, agua).</li>
+                        <li>Transporte y distribución urbana.</li>
+                    </ul>
+                </div>
+                <div class="canvas-box c-ingresos">
+                    <h4><i class="bi bi-graph-up-arrow me-2"></i>7. Flujo de Ingresos</h4>
+                    <ul>
+                        <li>Venta directa de bolsas 100g y 250g.</li>
+                        <li>Pagos electrónicos vía Nequi.</li>
+                    </ul>
+                </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Sección: Tienda Online -->
+    <section id="tienda" class="seccion bg-light reveal">
+        <div class="container">
+            <h2 class="titulo-seccion">Nuestra Tienda Escolar y Comercial</h2>
+            <p class="subtitulo-seccion">Elige la presentación ideal para calmar el hambre a media mañana. Paga rápido y seguro.</p>
+            
+            <div class="row justify-content-center g-5 mt-3">
+                <!-- Producto 1 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="producto-card">
+                        <span class="badge-producto">Ideal Estudiantes</span>
+                        <div class="producto-img-container">
+                            <!-- Imagen de trozos de piña -->
+                            <img src="https://images.unsplash.com/photo-1528825871115-3581a5387915?auto=format&fit=crop&w=600&q=80" alt="Snack Piña 100g" class="producto-img">
+                        </div>
+                        <div class="producto-body">
+                            <h3 class="producto-titulo">Snack de Piña</h3>
+                            <div class="producto-peso">Bolsa Personal 100g</div>
+                            <p class="producto-desc">Porción individual perfecta para la lonchera. Satisface los antojos de forma nutritiva sin excesos de azúcar.</p>
+                            <div class="producto-precio">$4.500</div>
+                            <button class="btn-add-cart" onclick="agregarAlCarrito(1, 'Snack Piña 100g', 4500, 'https://images.unsplash.com/photo-1528825871115-3581a5387915?auto=format&fit=crop&w=150&q=80')">
+                                <i class="bi bi-cart-plus me-2"></i>Agregar al Carrito
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto 2 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="producto-card">
+                        <span class="badge-producto premium">Ahorro Familiar</span>
+                        <div class="producto-img-container">
+                            <img src="https://images.unsplash.com/photo-1550258987-190a2d41a8ba?auto=format&fit=crop&w=600&q=80" alt="Snack Piña 250g" class="producto-img">
+                        </div>
+                        <div class="producto-body">
+                            <h3 class="producto-titulo">Snack de Piña</h3>
+                            <div class="producto-peso">Bolsa Familiar 250g</div>
+                            <p class="producto-desc">Formato más económico. Conserva su frescura gracias a su empaque de calidad. Ideal para tener en casa siempre.</p>
+                            <div class="producto-precio">$9.500</div>
+                            <button class="btn-add-cart" onclick="agregarAlCarrito(2, 'Snack Piña 250g', 9500, 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?auto=format&fit=crop&w=150&q=80')">
+                                <i class="bi bi-cart-plus me-2"></i>Agregar al Carrito
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección: Encuesta de Mercado (Digitalizada) -->
+    <section id="encuesta" class="seccion seccion-oscura reveal">
+        <div class="container">
+            <h2 class="titulo-seccion">Encuesta de Validación de Mercado</h2>
+            <p class="subtitulo-seccion">Ayúdanos a mejorar. Tu opinión es clave para adaptar nuestro producto a los gustos de Hato Corozal.</p>
+            
+            <div class="row justify-content-center mt-4">
+                <div class="col-lg-9">
+                    <form id="formEncuesta" class="encuesta-container" onsubmit="enviarEncuesta(event)">
+                        
+                        <!-- Pregunta 1 -->
+                        <div class="pregunta-box">
+                            <div class="pregunta-titulo">1. ¿Con qué frecuencia consume frutas o pasabocas (snacks) durante sus jornadas diarias en el colegio o trabajo?</div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p1" id="p1a" required>
+                                <label class="form-check-label form-check-label-custom" for="p1a">A) Todos los días</label>
+                            </div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p1" id="p1b">
+                                <label class="form-check-label form-check-label-custom" for="p1b">B) De 2 a 3 veces por semana</label>
+                            </div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p1" id="p1c">
+                                <label class="form-check-label form-check-label-custom" for="p1c">C) Rara vez</label>
+                            </div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p1" id="p1d">
+                                <label class="form-check-label form-check-label-custom" for="p1d">D) Nunca</label>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 2 -->
+                        <div class="pregunta-box">
+                            <div class="pregunta-titulo">2. ¿Qué tipo de pasabocas compra con mayor frecuencia para calmar el hambre a media mañana o media tarde?</div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p2" id="p2a" required>
+                                <label class="form-check-label form-check-label-custom" for="p2a">A) Paquetes de papas, plátanos o chicharrones</label>
+                            </div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p2" id="p2b">
+                                <label class="form-check-label form-check-label-custom" for="p2b">B) Galletas comerciales o panes</label>
+                            </div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p2" id="p2c">
+                                <label class="form-check-label form-check-label-custom" for="p2c">C) Fruta fresca entera o picada</label>
+                            </div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p2" id="p2d">
+                                <label class="form-check-label form-check-label-custom" for="p2d">D) Dulces, gomas, chocolates</label>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 3 -->
+                        <div class="pregunta-box">
+                            <div class="pregunta-titulo">3. Al elegir un snack elaborado a base de frutas, ¿qué característica prioriza usted?</div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p3" id="p3a" required>
+                                <label class="form-check-label form-check-label-custom" for="p3a">A) Que sea 100% natural, saludable y sin azúcares añadidos</label>
+                            </div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p3" id="p3b">
+                                <label class="form-check-label form-check-label-custom" for="p3b">B) Que tenga un precio muy económico</label>
+                            </div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p3" id="p3c">
+                                <label class="form-check-label form-check-label-custom" for="p3c">C) Que sea muy dulce y tenga un sabor intenso</label>
+                            </div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p3" id="p3d">
+                                <label class="form-check-label form-check-label-custom" for="p3d">D) Que el empaque sea llamativo y moderno</label>
+                            </div>
+                        </div>
+
+                        <!-- Omitimos de la 4 a la 7 visualmente en el HTML para mantener fluidez, pero agregamos 8,9,10 para mantener la estructura de venta -->
+                        
+                        <!-- Pregunta 8 -->
+                        <div class="pregunta-box">
+                            <div class="pregunta-titulo">8. Si tuviera a su disposición un snack de piña natural deshidratada que dure meses sin dañarse... ¿Estaría dispuesto(a) a comprarlo?</div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p8" id="p8a" required>
+                                <label class="form-check-label form-check-label-custom" for="p8a">A) Sí, lo compraría con frecuencia</label>
+                            </div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p8" id="p8b">
+                                <label class="form-check-label form-check-label-custom" for="p8b">B) Tal vez</label>
+                            </div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p8" id="p8c">
+                                <label class="form-check-label form-check-label-custom" for="p8c">C) No me llama la atención</label>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 9 -->
+                        <div class="pregunta-box">
+                            <div class="pregunta-titulo">9. ¿Cuánto dinero estaría dispuesto a pagar por una bolsa personal de 100 gramos?</div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p9" id="p9a" required>
+                                <label class="form-check-label form-check-label-custom" for="p9a">A) Entre $2.500 y $3.500 pesos</label>
+                            </div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p9" id="p9b">
+                                <label class="form-check-label form-check-label-custom" for="p9b">B) Entre $3.600 y $5.000 pesos</label>
+                            </div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p9" id="p9c">
+                                <label class="form-check-label form-check-label-custom" for="p9c">C) Más de $5.000 pesos</label>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 10 -->
+                        <div class="pregunta-box">
+                            <div class="pregunta-titulo">10. Sabiendo que al comprar apoya a los agricultores de Hato Corozal... ¿Este motivo aumenta su interés?</div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p10" id="p10a" required>
+                                <label class="form-check-label form-check-label-custom" for="p10a">A) Sí, prefiero apoyar la economía local</label>
+                            </div>
+                            <div class="form-check form-check-custom">
+                                <input class="form-check-input form-check-input-custom" type="radio" name="p10" id="p10b">
+                                <label class="form-check-label form-check-label-custom" for="p10b">B) No influye, me interesa el precio y sabor</label>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-5">
+                            <button type="submit" class="btn-hero px-5 w-100">Enviar Respuestas <i class="bi bi-send ms-2"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
             <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="info-card text-center">
-                        <i class="bi bi-basket-fill info-icon"></i>
-                        <h4 class="fw-bold">1. Selección Local</h4>
-                        <p class="text-muted">Compramos la mejor Piña Gold fresca directamente en las veredas de Hato Corozal, apoyando la economía de nuestros agricultores.</p>
+                <div class="col-lg-5 col-md-6">
+                    <div class="footer-logo">Piña<span>Snack</span></div>
+                    <p class="text-white-50 mb-4 pe-lg-5">Proyecto de Emprendimiento Agroempresarial enfocado en resolver la pérdida de cosechas locales a través de la agroindustria sostenible.</p>
+                    <div class="d-flex gap-3">
+                        <!-- Iconos Redes (Simulados) -->
+                        <a href="#" class="text-white fs-4"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white fs-4"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white fs-4"><i class="bi bi-whatsapp"></i></a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="info-card text-center">
-                        <i class="bi bi-droplet-half info-icon"></i>
-                        <h4 class="fw-bold">2. Osmo-deshidratación</h4>
-                        <p class="text-muted">Sumergimos la fruta en una solución que extrae el agua por presión osmótica, reduciendo el peso de la fruta en un 80%[cite: 1].</p>
-                    </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="footer-title">Navegación</h5>
+                    <ul class="footer-list">
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#historia">El Proyecto</a></li>
+                        <li><a href="#canvas">Modelo Canvas</a></li>
+                        <li><a href="#tienda">Tienda</a></li>
+                    </ul>
                 </div>
-                <div class="col-md-4">
-                    <div class="info-card text-center">
-                        <i class="bi bi-shield-check info-icon"></i>
-                        <h4 class="fw-bold">3. Larga Vida Útil</h4>
-                        <p class="text-muted">El resultado es un snack delicioso que dura meses sin necesidad de nevera[cite: 1]. ¡Ideal para la lonchera escolar o la oficina!</p>
-                    </div>
+                
+                <div class="col-lg-4 col-md-12">
+                    <h5 class="footer-title">Contacto y Ubicación</h5>
+                    <ul class="footer-list text-white-50">
+                        <li class="mb-3"><i class="bi bi-geo-alt-fill text-warning me-2"></i> Hato Corozal, Casanare, Colombia</li>
+                        <li class="mb-3"><i class="bi bi-building text-warning me-2"></i> I.E. Antonio Martínez Delgado</li>
+                        <li class="mb-3"><i class="bi bi-mortarboard-fill text-warning me-2"></i> Modalidad Técnica Agroempresarial (UPTC)</li>
+                        <li><i class="bi bi-telephone-fill text-warning me-2"></i> Nequi: 310 2240854</li>
+                    </ul>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tienda -->
-    <section id="tienda" class="seccion bg-white">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="titulo-seccion">Nuestros Snacks</h2>
-                <p class="lead text-muted">Elige tu presentación favorita. Empaque hermético y liviano fácil de llevar a cualquier parte[cite: 1].</p>
             </div>
             
-            <div class="row g-5 justify-content-center">
-                <!-- Producto 100g -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="producto-card">
-                        <span class="etiqueta-top">Ideal Escolares</span>
-                        <div class="overflow-hidden">
-                            <img src="imagenes/snack-100g.jpg" class="producto-img" alt="Snack 100g" onerror="this.src='https://images.unsplash.com/photo-1528825871115-3581a5387915?auto=format&fit=crop&w=600&q=80'">
-                        </div>
-                        <div class="p-4 text-center">
-                            <h4 class="fw-bold text-dark mb-1">Snack de Piña</h4>
-                            <p class="text-warning fw-bold mb-3">Bolsa Personal 100g</p>
-                            <p class="text-muted small mb-4">Porción individual ideal para saciar el hambre a media mañana. Práctica y nutritiva.</p>
-                            <div class="precio mb-4">$4.500</div>
-                            <button class="btn btn-nequi" onclick="comprar('100g', '4.500')">
-                                <i class="bi bi-phone me-2"></i>Pagar con Nequi
-                            </button>
-                        </div>
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-md-start mb-3 mb-md-0">
+                        &copy; 2026 Piña Snack - Todos los derechos reservados.
                     </div>
-                </div>
-
-                <!-- Producto 250g -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="producto-card">
-                        <span class="etiqueta-top bg-warning text-dark">Ahorro Familiar</span>
-                        <div class="overflow-hidden">
-                            <img src="imagenes/snack-250g.jpg" class="producto-img" alt="Snack 250g" onerror="this.src='https://images.unsplash.com/photo-1528825871115-3581a5387915?auto=format&fit=crop&w=600&q=80'">
-                        </div>
-                        <div class="p-4 text-center">
-                            <h4 class="fw-bold text-dark mb-1">Snack de Piña</h4>
-                            <p class="text-warning fw-bold mb-3">Bolsa Familiar 250g</p>
-                            <p class="text-muted small mb-4">Formato más grande. Más económico e ideal para compartir en casa con toda la familia.</p>
-                            <div class="precio mb-4">$9.500</div>
-                            <button class="btn btn-nequi" onclick="comprar('250g', '9.500')">
-                                <i class="bi bi-phone me-2"></i>Pagar con Nequi
-                            </button>
-                        </div>
+                    <div class="col-md-6 text-md-end text-white-50">
+                        <p class="mb-1"><strong>Autores:</strong> Pedro Tineo, Josué Montoya, Emmanuel Gomez (Décimo B)</p>
+                        <!-- Petición del usuario añadida sutilmente -->
+                        <p class="mb-0 creditos-programacion"><i class="bi bi-code-slash"></i> Desarrollo Web: Daniela Gómez Bastilla (Programadora)</p>
                     </div>
                 </div>
             </div>
-
-            <!-- Instrucciones de Pago -->
-            <div class="row justify-content-center mt-5 pt-4">
-                <div class="col-lg-8">
-                    <div class="bg-light p-5 rounded-4 text-center shadow-sm" style="border: 1px solid #e9ecef;">
-                        <h4 class="fw-bold mb-4"><i class="bi bi-info-circle text-primary me-2"></i>¿Cómo realizo mi compra?</h4>
-                        <ol class="text-start text-muted fs-5 mb-4 px-md-5">
-                            <li class="mb-2">Haz clic en el botón <strong>"Pagar con Nequi"</strong> del producto que desees.</li>
-                            <li class="mb-2">Serás redirigido a nuestro WhatsApp oficial.</li>
-                            <li class="mb-2">Realiza la transferencia al número Nequi: <strong style="color: var(--nequi);">310 2240854</strong>.</li>
-                            <li>Envíanos el comprobante por WhatsApp y coordinaremos la entrega.</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Botón Flotante WhatsApp -->
-    <a href="https://wa.me/573102240854?text=Hola,%20tengo%20una%20duda%20sobre%20los%20Snacks%20de%20Piña" class="whatsapp-float" target="_blank" title="Contáctanos por WhatsApp">
-        <i class="bi bi-whatsapp"></i>
-    </a>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container text-center">
-            <h3 class="fw-bold text-white mb-4">Piña Snack <i class="bi bi-brightness-high text-warning"></i></h3>
-            <p class="mb-2 fs-5">Proyecto de Emprendimiento Agroempresarial (CIIU 1030)</p>
-            <p class="mb-4 text-white-50"><i class="bi bi-geo-alt-fill me-2"></i>Hato Corozal, Casanare, Colombia</p>
-            <hr style="border-color: rgba(255,255,255,0.1); margin: 30px 0;">
-            <p class="small text-white-50 mb-1">Institución Educativa Antonio Martínez Delgado - Modalidad Técnica Agroempresarial (Articulación UPTC)</p>
-            <p class="small text-white-50 mb-0">Autores: Pedro Tineo, Josué Montoya y Emmanuel Gomez - Grado: Décimo B</p>
         </div>
     </footer>
 
-    <!-- Scripts de Bootstrap y Funciones -->
+    <!-- BOTÓN FLOTANTE WHATSAPP -->
+    <a href="https://wa.me/573102240854?text=Hola,%20quisiera%20más%20información%20sobre%20el%20proyecto%20Piña%20Snack" class="btn-whatsapp-float" target="_blank" aria-label="Chat en WhatsApp">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+
+    <!-- OFFCANVAS: CARRITO DE COMPRAS -->
+    <div class="offcanvas offcanvas-end offcanvas-cart" tabindex="-1" id="cartOffcanvas">
+        <div class="offcanvas-header cart-header">
+            <h5 class="offcanvas-title fw-bold"><i class="bi bi-basket2-fill me-2 text-warning"></i>Tu Pedido</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column" id="cartBody">
+            <!-- Items del carrito se inyectan acá con JS -->
+            <div id="cartItemsContainer" class="flex-grow-1 overflow-auto">
+                <div class="text-center text-muted mt-5" id="emptyCartMsg">
+                    <i class="bi bi-cart-x fs-1"></i>
+                    <p class="mt-2">Tu canasta está vacía</p>
+                </div>
+            </div>
+            
+            <!-- Zona de Total y Botón de Pago -->
+            <div class="cart-total-section mt-auto d-none" id="cartCheckoutArea">
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="fs-5 fw-bold text-dark">Total:</span>
+                    <span class="fs-4 fw-900 text-success" id="cartTotalValue">$0</span>
+                </div>
+                <button class="btn-nequi-checkout" onclick="procesarPagoNequi()">
+                    <i class="bi bi-phone-vibrate"></i> Pagar total con Nequi
+                </button>
+                <div class="text-center mt-2 small text-muted">
+                    Pago seguro exclusivo al número <strong>310 2240854</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function comprar(presentacion, precio) {
-            const numeroNequi = "573102240854"; 
-            const mensaje = `🍍 ¡Hola Piña Snack! Vengo de su sitio web.\n\nQuiero pedir el *Snack de Piña (${presentacion})*.\nValor total: $${precio}\n\nQuedo atento para enviar el comprobante de Nequi.`;
-            const url = `https://wa.me/${numeroNequi}?text=${encodeURIComponent(mensaje)}`;
+        /* ==========================================================================
+           LOGICA JAVASCRIPT Y FUNCIONALIDADES
+           ========================================================================== */
+        
+        // 1. Quitar Loader al cargar página
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 500);
+            }, 800); // Pequeño retraso para efecto visual
+        });
+
+        // 2. Efecto scroll Navbar
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar-custom');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // 3. Animaciones Reveal (Intersection Observer)
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting){
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, revealOptions);
+        
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // 4. Lógica de Envío de Encuesta con SweetAlert
+        function enviarEncuesta(e) {
+            e.preventDefault();
+            // Simular envío de datos
+            Swal.fire({
+                title: '¡Respuestas Registradas!',
+                text: 'Muchas gracias por apoyar nuestro estudio de mercado en Hato Corozal.',
+                icon: 'success',
+                confirmButtonColor: '#2e7d32',
+                confirmButtonText: 'Genial'
+            });
+            document.getElementById('formEncuesta').reset();
+        }
+
+        // 5. Sistema de Carrito de Compras (Avanzado)
+        let carrito = [];
+        const numNequi = "573102240854";
+
+        function agregarAlCarrito(id, nombre, precio, img) {
+            // Verificar si ya existe
+            const itemExistente = carrito.find(item => item.id === id);
+            
+            if(itemExistente) {
+                itemExistente.cantidad += 1;
+            } else {
+                carrito.push({ id, nombre, precio, img, cantidad: 1 });
+            }
+            
+            actualizarUI();
+            
+            // Alerta visual de producto agregado
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: 'Agregado a la canasta',
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true
+            });
+        }
+
+        function eliminarDelCarrito(id) {
+            carrito = carrito.filter(item => item.id !== id);
+            actualizarUI();
+        }
+
+        function actualizarUI() {
+            const container = document.getElementById('cartItemsContainer');
+            const emptyMsg = document.getElementById('emptyCartMsg');
+            const checkoutArea = document.getElementById('cartCheckoutArea');
+            const badge = document.getElementById('cartBadgeCount');
+            const totalDisplay = document.getElementById('cartTotalValue');
+            
+            // Actualizar Badge
+            const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+            badge.innerText = totalItems;
+            
+            // Render HTML
+            if(carrito.length === 0) {
+                container.innerHTML = '';
+                container.appendChild(emptyMsg);
+                emptyMsg.classList.remove('d-none');
+                checkoutArea.classList.add('d-none');
+            } else {
+                emptyMsg.classList.add('d-none');
+                checkoutArea.classList.remove('d-none');
+                container.innerHTML = ''; // Limpiar
+                
+                let totalPesos = 0;
+                
+                carrito.forEach(item => {
+                    totalPesos += (item.precio * item.cantidad);
+                    
+                    const div = document.createElement('div');
+                    div.className = 'cart-item';
+                    div.innerHTML = `
+                        <img src="${item.img}" alt="${item.nombre}" class="cart-item-img">
+                        <div class="cart-item-details">
+                            <h6 class="cart-item-title">${item.nombre}</h6>
+                            <small class="text-muted">Cant: ${item.cantidad}</small><br>
+                            <span class="cart-item-price">$${(item.precio * item.cantidad).toLocaleString('es-CO')}</span>
+                        </div>
+                        <button class="cart-item-remove" onclick="eliminarDelCarrito(${item.id})">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    `;
+                    container.appendChild(div);
+                });
+                
+                totalDisplay.innerText = `$${totalPesos.toLocaleString('es-CO')}`;
+            }
+        }
+
+        // 6. Procesar Pago construyendo link de WhatsApp inteligente
+        function procesarPagoNequi() {
+            if(carrito.length === 0) return;
+            
+            let totalPesos = 0;
+            let resumen = "🍍 *NUEVO PEDIDO PIÑA SNACK* 🍍\n\nHola, vengo de la página web. Quiero comprar lo siguiente:\n\n";
+            
+            carrito.forEach(item => {
+                const subtotal = item.precio * item.cantidad;
+                totalPesos += subtotal;
+                resumen += `▫️ ${item.cantidad}x ${item.nombre} - $${subtotal.toLocaleString('es-CO')}\n`;
+            });
+            
+            resumen += `\n💰 *Total a pagar:* $${totalPesos.toLocaleString('es-CO')}\n\n`;
+            resumen += "Ya tengo listo el comprobante de Nequi. ¿Me indican si hay disponibilidad para despachar?";
+            
+            // Generar URL
+            const url = `https://wa.me/${numNequi}?text=${encodeURIComponent(resumen)}`;
+            
+            // Cerrar Offcanvas
+            const cartOffcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('cartOffcanvas'));
+            cartOffcanvas.hide();
+            
+            // Redirigir
             window.open(url, '_blank');
         }
     </script>
