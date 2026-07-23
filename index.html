@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piña Snack | Agroindustria de Hato Corozal</title>
+    
+    <!-- Fuentes de Google: Poppins para un look moderno y amigable -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --verde-oscuro: #1b5e20;
+            --verde-claro: #4caf50;
+            --amarillo-pina: #fbc02d;
+            --fondo-crema: #fdfbf7;
+            --texto-oscuro: #2d3436;
+            --nequi: #4a148c;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--fondo-crema);
+            color: var(--texto-oscuro);
+            scroll-behavior: smooth;
+        }
+
+        /* --- Menú Glassmorphism (Efecto Vidrio) --- */
+        .navbar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .navbar-brand {
+            color: var(--verde-oscuro) !important;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+        .nav-link {
+            color: var(--texto-oscuro) !important;
+            font-weight: 600;
+            margin: 0 10px;
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0; height: 3px;
+            bottom: 0; left: 0;
+            background-color: var(--amarillo-pina);
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* --- Hero Section (Portada Inmersiva) --- */
+        .hero {
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(to right, rgba(27, 94, 32, 0.9), rgba(76, 175, 80, 0.7)), url('https://images.unsplash.com/photo-1550258987-190a2d41a8ba?auto=format&fit=crop&w=1920&q=80') center/cover;
+            color: white;
+            padding-top: 80px; /* Espacio para el menú */
+        }
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        .hero h1 span {
+            color: var(--amarillo-pina);
+        }
+        .hero p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        /* --- Secciones y Espaciados --- */
+        .seccion { padding: 100px 0; }
+        .titulo-seccion {
+            font-weight: 800;
+            color: var(--verde-oscuro);
+            margin-bottom: 50px;
+            position: relative;
+            display: inline-block;
+        }
+        .titulo-seccion::after {
+            content: '';
+            position: absolute;
+            width: 50%; height: 4px;
+            bottom: -10px; left: 25%;
+            background-color: var(--amarillo-pina);
+            border-radius: 2px;
+        }
+
+        /* --- Tarjetas de Información --- */
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            height: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border-bottom: 5px solid var(--verde-claro);
+            transition: transform 0.3s;
+        }
+        .info-card:hover { transform: translateY(-10px); }
+        .info-icon {
+            font-size: 3rem;
+            color: var(--amarillo-pina);
+            margin-bottom: 20px;
+        }
+
+        /* --- Tarjetas de Producto --- */
+        .producto-card {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .producto-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+        }
+        .etiqueta-top {
+            position: absolute; top: 20px; right: 20px;
+            background: var(--verde-oscuro); color: white;
+            padding: 5px 15px; border-radius: 20px;
+            font-weight: 600; z-index: 2;
+        }
+        .producto-img {
+            height: 280px; width: 100%; object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .producto-card:hover .producto-img {
+            transform: scale(1.1);
+        }
+        .precio {
+            font-size: 2.5rem; font-weight: 800;
+            color: var(--verde-oscuro);
+        }
+        
+        /* Botones */
+        .btn-principal {
+            background-color: var(--amarillo-pina);
+            color: var(--texto-oscuro);
+            font-weight: 800;
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: none;
+            transition: 0.3s;
+        }
+        .btn-principal:hover {
+            background-color: #f5b000;
+            transform: scale(1.05);
+        }
+        .btn-nequi {
+            background-color: var(--nequi); color: white;
+            font-weight: 600; padding: 15px; border-radius: 15px;
+            width: 100%; border: none; transition: 0.3s;
+        }
+        .btn-nequi:hover { background-color: #380b6b; color: white; }
+
+        /* --- Botón Flotante WhatsApp --- */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px; height: 60px;
+            bottom: 40px; right: 40px;
+            background-color: #25d366; color: #FFF;
+            border-radius: 50px; text-align: center;
+            font-size: 30px; box-shadow: 2px 2px 15px rgba(0,0,0,0.2);
+            z-index: 1000; transition: all 0.3s ease;
+            display: flex; justify-content: center; align-items: center;
+            text-decoration: none;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1); color: white;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--verde-oscuro); color: rgba(255,255,255,0.8);
+            padding: 60px 0 30px 0;
+        }
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navbarPrincipal">
+
+    <!-- Navbar -->
+    <nav id="navbarPrincipal" class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#inicio">
+                <i class="bi bi-brightness-high-fill text-warning"></i> Piña Snack
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="menu">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#historia">Nuestra Historia</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#proceso">El Proceso</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#tienda">Tienda</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <span class="badge bg-warning text-dark mb-3 px-3 py-2 rounded-pill fs-6">Agroindustria 100% Casanareña</span>
+                    <h1>El sabor del llano, <span>en tu bolsillo.</span></h1>
+                    <p class="mb-5 mt-3 fs-4">Snacks de piña natural osmo-deshidratada. Una alternativa nutritiva, deliciosa y de larga vida útil que apoya directamente a los campesinos de Hato Corozal.</p>
+                    <a href="#tienda" class="btn btn-principal shadow-lg"><i class="bi bi-cart3 me-2"></i>Ver Productos</a>
+                    <a href="#historia" class="btn btn-outline-light ms-3 px-4 py-3 rounded-pill fw-bold" style="border-width: 2px;">Conoce Más</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nuestra Historia -->
+    <section id="historia" class="seccion bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="titulo-seccion">Un Emprendimiento con Propósito</h2>
+            </div>
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6">
+                    <img src="https://images.unsplash.com/photo-1589984662646-e7b2e4962f18?auto=format&fit=crop&w=800&q=80" alt="Cultivo de Piña" class="img-fluid rounded-4 shadow">
+                </div>
+                <div class="col-lg-6">
+                    <h3 class="fw-bold mb-4" style="color: var(--verde-oscuro);">El Problema que Resolvemos</h3>
+                    <p class="fs-5 text-muted">El departamento de Casanare es un gran productor de piña, especialmente la variedad <strong>Piña GOLD</strong>, con rendimientos de hasta 35 toneladas por hectárea[cite: 1].</p>
+                    <p class="fs-5 text-muted">Sin embargo, en Hato-Corozal, las difíciles vías de acceso durante el invierno causan que hasta un <strong>25% de la producción local se pierda</strong> por sobre maduración[cite: 1]. Nosotros intervenimos comprando esa fruta a un precio justo para transformarla y evitar el desperdicio[cite: 1].</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- El Proceso (Info Cards) -->
+    <section id="proceso" class="seccion">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="titulo-seccion">Innovación y Calidad</h2>
+                <p class="lead text-muted">¿Cómo logramos un producto duradero sin químicos?</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="info-card text-center">
+                        <i class="bi bi-basket-fill info-icon"></i>
+                        <h4 class="fw-bold">1. Selección Local</h4>
+                        <p class="text-muted">Compramos la mejor Piña Gold fresca directamente en las veredas de Hato Corozal, apoyando la economía de nuestros agricultores.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-card text-center">
+                        <i class="bi bi-droplet-half info-icon"></i>
+                        <h4 class="fw-bold">2. Osmo-deshidratación</h4>
+                        <p class="text-muted">Sumergimos la fruta en una solución que extrae el agua por presión osmótica, reduciendo el peso de la fruta en un 80%[cite: 1].</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-card text-center">
+                        <i class="bi bi-shield-check info-icon"></i>
+                        <h4 class="fw-bold">3. Larga Vida Útil</h4>
+                        <p class="text-muted">El resultado es un snack delicioso que dura meses sin necesidad de nevera[cite: 1]. ¡Ideal para la lonchera escolar o la oficina!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tienda -->
+    <section id="tienda" class="seccion bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="titulo-seccion">Nuestros Snacks</h2>
+                <p class="lead text-muted">Elige tu presentación favorita. Empaque hermético y liviano fácil de llevar a cualquier parte[cite: 1].</p>
+            </div>
+            
+            <div class="row g-5 justify-content-center">
+                <!-- Producto 100g -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="producto-card">
+                        <span class="etiqueta-top">Ideal Escolares</span>
+                        <div class="overflow-hidden">
+                            <img src="imagenes/snack-100g.jpg" class="producto-img" alt="Snack 100g" onerror="this.src='https://images.unsplash.com/photo-1528825871115-3581a5387915?auto=format&fit=crop&w=600&q=80'">
+                        </div>
+                        <div class="p-4 text-center">
+                            <h4 class="fw-bold text-dark mb-1">Snack de Piña</h4>
+                            <p class="text-warning fw-bold mb-3">Bolsa Personal 100g</p>
+                            <p class="text-muted small mb-4">Porción individual ideal para saciar el hambre a media mañana. Práctica y nutritiva.</p>
+                            <div class="precio mb-4">$4.500</div>
+                            <button class="btn btn-nequi" onclick="comprar('100g', '4.500')">
+                                <i class="bi bi-phone me-2"></i>Pagar con Nequi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto 250g -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="producto-card">
+                        <span class="etiqueta-top bg-warning text-dark">Ahorro Familiar</span>
+                        <div class="overflow-hidden">
+                            <img src="imagenes/snack-250g.jpg" class="producto-img" alt="Snack 250g" onerror="this.src='https://images.unsplash.com/photo-1528825871115-3581a5387915?auto=format&fit=crop&w=600&q=80'">
+                        </div>
+                        <div class="p-4 text-center">
+                            <h4 class="fw-bold text-dark mb-1">Snack de Piña</h4>
+                            <p class="text-warning fw-bold mb-3">Bolsa Familiar 250g</p>
+                            <p class="text-muted small mb-4">Formato más grande. Más económico e ideal para compartir en casa con toda la familia.</p>
+                            <div class="precio mb-4">$9.500</div>
+                            <button class="btn btn-nequi" onclick="comprar('250g', '9.500')">
+                                <i class="bi bi-phone me-2"></i>Pagar con Nequi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instrucciones de Pago -->
+            <div class="row justify-content-center mt-5 pt-4">
+                <div class="col-lg-8">
+                    <div class="bg-light p-5 rounded-4 text-center shadow-sm" style="border: 1px solid #e9ecef;">
+                        <h4 class="fw-bold mb-4"><i class="bi bi-info-circle text-primary me-2"></i>¿Cómo realizo mi compra?</h4>
+                        <ol class="text-start text-muted fs-5 mb-4 px-md-5">
+                            <li class="mb-2">Haz clic en el botón <strong>"Pagar con Nequi"</strong> del producto que desees.</li>
+                            <li class="mb-2">Serás redirigido a nuestro WhatsApp oficial.</li>
+                            <li class="mb-2">Realiza la transferencia al número Nequi: <strong style="color: var(--nequi);">310 2240854</strong>.</li>
+                            <li>Envíanos el comprobante por WhatsApp y coordinaremos la entrega.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Botón Flotante WhatsApp -->
+    <a href="https://wa.me/573102240854?text=Hola,%20tengo%20una%20duda%20sobre%20los%20Snacks%20de%20Piña" class="whatsapp-float" target="_blank" title="Contáctanos por WhatsApp">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <h3 class="fw-bold text-white mb-4">Piña Snack <i class="bi bi-brightness-high text-warning"></i></h3>
+            <p class="mb-2 fs-5">Proyecto de Emprendimiento Agroempresarial (CIIU 1030)</p>
+            <p class="mb-4 text-white-50"><i class="bi bi-geo-alt-fill me-2"></i>Hato Corozal, Casanare, Colombia</p>
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 30px 0;">
+            <p class="small text-white-50 mb-1">Institución Educativa Antonio Martínez Delgado - Modalidad Técnica Agroempresarial (Articulación UPTC)</p>
+            <p class="small text-white-50 mb-0">Autores: Pedro Tineo, Josué Montoya y Emmanuel Gomez - Grado: Décimo B</p>
+        </div>
+    </footer>
+
+    <!-- Scripts de Bootstrap y Funciones -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function comprar(presentacion, precio) {
+            const numeroNequi = "573102240854"; 
+            const mensaje = `🍍 ¡Hola Piña Snack! Vengo de su sitio web.\n\nQuiero pedir el *Snack de Piña (${presentacion})*.\nValor total: $${precio}\n\nQuedo atento para enviar el comprobante de Nequi.`;
+            const url = `https://wa.me/${numeroNequi}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
