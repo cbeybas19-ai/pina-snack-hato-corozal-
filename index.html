@@ -39,6 +39,13 @@
     /* A little more breathing room keeps the editorial display face readable. */
     .hero h1 { letter-spacing: -.05em; }
     .details { background:#eef1e6; padding:96px 0; } .details-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:65px;align-items:start}.details-copy h2{font:600 clamp(39px,4.5vw,61px)/.99 Fraunces,serif;letter-spacing:-.06em;margin:18px 0 20px}.details-copy p{color:#4b6253;line-height:1.6;font-size:16px;max-width:460px}.fact-list{border-top:1px solid var(--line)}.fact{display:grid;grid-template-columns:54px 1fr;gap:16px;padding:19px 0;border-bottom:1px solid var(--line)}.fact-icon{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;background:#d8e4ce;color:#1f5639;font-size:18px}.fact h3{font:600 20px Fraunces,serif;letter-spacing:-.035em;margin:0 0 4px}.fact p{font-size:13px;color:var(--muted);line-height:1.45;margin:0}.faq{padding:102px 0}.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px}.faq h2{font:600 clamp(39px,4.5vw,60px)/.98 Fraunces,serif;letter-spacing:-.065em;margin:18px 0}.faq-list{border-top:1px solid var(--line)}details{border-bottom:1px solid var(--line);padding:20px 0}summary{cursor:pointer;list-style:none;font-weight:700;font-size:16px;display:flex;justify-content:space-between;gap:15px}summary::-webkit-details-marker{display:none}summary:after{content:'+';font:500 24px/14px Fraunces,serif}details[open] summary:after{content:'−'}details p{color:var(--muted);font-size:14px;line-height:1.55;margin:13px 34px 0 0}@media(max-width:800px){.details{padding:75px 0}.details-grid,.faq-grid{grid-template-columns:1fr;gap:28px}.faq{padding:75px 0}}
+    /* Todas las presentaciones muestran el ingrediente real del proyecto. */
+    .product:nth-child(1) .product-img,
+    .product:nth-child(2) .product-img,
+    .product:nth-child(3) .product-img { background-image:url('https://images.unsplash.com/photo-1550258987-190a2d41a8ba?auto=format&fit=crop&w=1200&q=88'); }
+    .product:nth-child(1) .product-img { background-position:35% center; }
+    .product:nth-child(2) .product-img { background-position:60% center; }
+    .product:nth-child(3) .product-img { background-position:78% center; }
   </style>
 </head>
 <body>
